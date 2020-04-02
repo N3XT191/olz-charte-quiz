@@ -29,3 +29,5 @@ yarn-error.log*
 /resized
 /renamed
 /images
+/public/maps
+/thumb
