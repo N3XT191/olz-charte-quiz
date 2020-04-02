@@ -1,10 +1,11 @@
 import React from "react";
 import "@blueprintjs/core/lib/css/blueprint.css";
 
-import { Button, Callout, ButtonGroup, Slider, H1, H5, H2 } from "@blueprintjs/core";
+import { Button, Callout, ButtonGroup, Slider, H1, H5 } from "@blueprintjs/core";
 import { css } from "glamor";
 import { Link } from "react-router-dom";
 import { baseURL } from "./constants";
+import Info from "./Info";
 
 interface State {
 	difficulty: number;
@@ -94,36 +95,10 @@ class CreateGame extends React.Component<{}, State> {
 	private getFullURL = () => {
 		return baseURL + "play/" + this.getURL();
 	};
+
 	public render() {
 		return this.state.info ? (
-			<div {...styles.container} {...styles.info}>
-				<H1>OLZ Charte Quiz</H1>
-				<H5>by Marc Bitterli</H5>
-				<p>
-					Jedi Rundi gsehsch du en chliine Usschnitt vu einere vu euse OL Charte und du musch errate
-					vu wellere das er isch!
-				</p>
-				<p>
-					Wähl dAnzahl Rundene wo du willsch spiele und dSchwierigkeitsstufe. Die bestimmt, wie
-					gross de Usschnitt isch wo du gsehsch. Am Endi wirsch du e Übersicht gseh vu dine Antworte
-					und was die richtig Lösig gsi isch.
-				</p>
-				<p>
-					Wenn du gege dini Fründe willsch spiele, denn schick ihne de Link wo aazeigt wird (nachdem
-					du dSchwirigkeit und dRundene gwählt hesch) und ihr werded die gliiche Frage becho.
-				</p>
-				<p>
-					<H2>To do:</H2>
-					<ol>
-						<li>Schwierigkeitsstufe 3 fertigstelle</li>
-						<li>Ranking vu allne wo die gliiche Frage beantworted hend</li>
-						<li>Mülibachtobel Charte hinzuefüege</li>
-						<li>Präzise Usschnitt bi de Lösig aazeige</li>
-					</ol>
-				</p>
-				<p>Bi Frage oder Feedback schriebet bitte an marc@bitter.li</p>
-				<Button onClick={() => this.setState({ info: false })}>zrugg...</Button>
-			</div>
+			<Info unsetInfo={() => this.setState({ info: false })} />
 		) : (
 			<div {...styles.container}>
 				<H1>OLZ Charte Quiz</H1>
