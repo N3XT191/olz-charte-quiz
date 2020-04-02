@@ -12,3 +12,5 @@ To change styles, change/append the `const styles` object in `App.tsx`, `CreateG
 Apply styles to a div by adding `{...styles.property}`
 
 run client with `npm start`and build with `npm build`
+
+And pls just use VSCode, with TypeScript you get a lot of help with your objects and stuff...
