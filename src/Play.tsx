@@ -6,8 +6,9 @@ import { css } from "glamor";
 
 import { Question, Answer } from "./interfaces";
 import QuestionCard from "./Question";
-import { getQuestions, getAnswers } from "./api";
+import { getQuestions, getAnswers, submitScore } from "./api";
 import Ranking from "./Ranking";
+import EnterName from "./EnterName";
 
 interface State {
 	questions: Question[];
@@ -15,6 +16,7 @@ interface State {
 	done: boolean;
 	answers: Answer[];
 	correctAnswers: Answer[];
+	name: string;
 }
 interface Props {
 	match: { params: { seed: string } };
@@ -51,15 +53,18 @@ class Play extends React.Component<Props, State> {
 	}
 	public state = {
 		questions: [] as Question[],
-		answers: [],
-		correctAnswers: [],
+		answers: [] as Answer[],
+		correctAnswers: [] as Answer[],
 		currentQuestion: 0,
 		done: false,
+		name: "",
 	};
 	public render() {
 		const question = this.state.questions[this.state.currentQuestion];
 
-		return !this.state.done ? (
+		return !this.state.name ? (
+			<EnterName onEnter={(name: string) => this.setState({ name })} />
+		) : !this.state.done ? (
 			<div>
 				<div {...styles.progressBarContainer}>
 					<ProgressBar
@@ -75,17 +80,25 @@ class Play extends React.Component<Props, State> {
 						img_url={question.img_url}
 						answers={question.answers}
 						onSubmit={(selectedAnswer: number) => {
+							const newAnswers = [
+								...this.state.answers,
+								{
+									id: selectedAnswer,
+									text: question.answers.find((answer) => answer.id === selectedAnswer)!.text,
+								},
+							];
 							this.setState({
-								answers: [
-									...this.state.answers,
-									{
-										id: selectedAnswer,
-										text: question.answers.find((answer) => answer.id === selectedAnswer)!.text,
-									},
-								],
+								answers: newAnswers,
 							});
 							if (this.state.currentQuestion === this.state.questions.length - 1) {
 								this.setState({ done: true });
+								let points = 0;
+								newAnswers.forEach((answer, i) => {
+									if (answer.id === this.state.correctAnswers[i].id) {
+										points += 1;
+									}
+								});
+								submitScore(this.state.name, points, this.props.match.params.seed);
 							} else {
 								this.setState({ currentQuestion: this.state.currentQuestion + 1 });
 							}
@@ -100,6 +113,7 @@ class Play extends React.Component<Props, State> {
 				answers={this.state.answers}
 				correctAnswers={this.state.correctAnswers}
 				answerThumbs={this.state.questions.map((question) => question.img_url)}
+				seed={this.props.match.params.seed}
 			/>
 		);
 	}

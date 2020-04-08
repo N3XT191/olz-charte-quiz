@@ -1,11 +1,12 @@
 import React from "react";
 import "@blueprintjs/core/lib/css/blueprint.css";
 
-import { H1, Callout, H3, Intent, Button } from "@blueprintjs/core";
+import { H1, Callout, H3, Intent, Button, HTMLTable } from "@blueprintjs/core";
 
-import { Answer } from "./interfaces";
+import { Answer, Rank } from "./interfaces";
 import { css } from "glamor";
 import { baseURL } from "./constants";
+import { getRanking } from "./api";
 
 const styles = {
 	container: css({
@@ -36,15 +37,32 @@ const styles = {
 		backgroundColor: "#fff",
 		"@media(max-width: 500px)": { marginTop: "10px" },
 	}),
+	ranking: css({ marginBottom: "10px" }),
 };
 
 interface Props {
 	answers: Answer[];
 	correctAnswers: Answer[];
 	answerThumbs: string[];
+	seed: string;
 }
 
-class Ranking extends React.Component<Props, {}> {
+interface State {
+	ranking: Rank[];
+}
+
+class Ranking extends React.Component<Props, State> {
+	private interval: any = null;
+	public state = { ranking: [] as Rank[] };
+
+	async componentDidMount() {
+		const ranking = await getRanking(this.props.seed);
+		this.setState({ ranking });
+		this.interval = setInterval(async () => {
+			const newRanking = await getRanking(this.props.seed);
+			this.setState({ ranking: newRanking });
+		}, 10000);
+	}
 	public render() {
 		let points = 0;
 		this.props.answers.forEach((answer, i) => {
@@ -55,27 +73,35 @@ class Ranking extends React.Component<Props, {}> {
 
 		return (
 			<div {...styles.container}>
-				{/*<HTMLTable striped={true} bordered={true}>
-					<thead>
-						<tr>
-							<td>Rank</td>
-							<td>Name</td>
-							<td>Points</td>
-						</tr>
-					</thead>
-					<tbody>
-						{this.state.ranking.map((rank, i) => (
-							<tr>
-								<td>{i}</td>
-								<td>{rank.name}</td>
-								<td>{rank.points}</td>
-							</tr>
-						))}
-					</tbody>
-						</HTMLTable>*/}
 				<H1 {...styles.title}>
 					Resultat: {points}/{this.props.answers.length}
 				</H1>
+				<div {...styles.ranking}>
+					<Callout>
+						<HTMLTable striped={true} bordered={true} style={{ width: "100%" }}>
+							<thead>
+								<tr>
+									<td>Rang</td>
+									<td>Name</td>
+									<td>Pünkt</td>
+								</tr>
+							</thead>
+							<tbody>
+								{this.state.ranking.map((rank, i) => (
+									<tr>
+										<td>{i + 1}</td>
+										<td>{rank.name}</td>
+										<td>{rank.score}</td>
+									</tr>
+								))}
+							</tbody>
+						</HTMLTable>
+						<div>dRangliste wird automatisch aktualisiert.</div>
+						<div>
+							Bitte <b>nöd</b> dSiite neu lade!
+						</div>
+					</Callout>
+				</div>
 				<a href={baseURL} {...styles.newGame}>
 					<Button>Neus Spiel</Button>
 				</a>

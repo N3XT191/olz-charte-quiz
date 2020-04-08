@@ -9,5 +9,5 @@ export interface Question {
 
 export interface Rank {
 	name: string;
-	points: number;
+	score: number;
 }
