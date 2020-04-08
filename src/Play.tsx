@@ -50,6 +50,13 @@ class Play extends React.Component<Props, State> {
 		const questions = await getQuestions(this.props.match.params.seed);
 		const correctAnswers = await getAnswers(this.props.match.params.seed);
 		this.setState({ questions, correctAnswers });
+		if (localStorage.getItem("olz-quiz_" + this.props.match.params.seed)) {
+			this.setState({
+				answers: JSON.parse(localStorage.getItem("olz-quiz_" + this.props.match.params.seed)!),
+				done: true,
+				name: "placeholder",
+			});
+		}
 	}
 	public state = {
 		questions: [] as Question[],
@@ -99,6 +106,10 @@ class Play extends React.Component<Props, State> {
 									}
 								});
 								submitScore(this.state.name, points, this.props.match.params.seed);
+								localStorage.setItem(
+									"olz-quiz_" + this.props.match.params.seed,
+									JSON.stringify(this.state.answers)
+								);
 							} else {
 								this.setState({ currentQuestion: this.state.currentQuestion + 1 });
 							}

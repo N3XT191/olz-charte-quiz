@@ -97,9 +97,6 @@ class Ranking extends React.Component<Props, State> {
 							</tbody>
 						</HTMLTable>
 						<div>dRangliste wird automatisch aktualisiert.</div>
-						<div>
-							Bitte <b>nöd</b> dSiite neu lade!
-						</div>
 					</Callout>
 				</div>
 				<a href={baseURL} {...styles.newGame}>
