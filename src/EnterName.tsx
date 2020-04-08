@@ -26,6 +26,7 @@ const styles = {
 			fontSize: "14px",
 		},
 	}),
+	input: css({ display: "flex" }),
 };
 
 interface Props {
@@ -41,12 +42,14 @@ class EnterName extends React.Component<Props, State> {
 		return (
 			<div {...styles.container} {...styles.info}>
 				<H1>Name</H1>
-				<InputGroup
-					placeholder={"din Name..."}
-					value={this.state.name}
-					onChange={(event: any) => this.setState({ name: event.target.value })}
-				/>
-				<Button onClick={() => this.props.onEnter(this.state.name)}>Abschicke...</Button>
+				<div {...styles.input}>
+					<InputGroup
+						placeholder={"din Name..."}
+						value={this.state.name}
+						onChange={(event: any) => this.setState({ name: event.target.value })}
+					/>
+					<Button onClick={() => this.props.onEnter(this.state.name)}>Abschicke...</Button>
+				</div>
 			</div>
 		);
 	}

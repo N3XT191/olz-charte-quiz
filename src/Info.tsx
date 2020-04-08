@@ -42,8 +42,10 @@ const Info = ({ unsetInfo }: { unsetInfo: () => void }) => {
 				richtig Lösig gsi isch.
 			</p>
 			<p>
-				nn du gege dini Fründe willsch spiele, denn schick ihne de Link wo aazeigt wird (nachdem du
-				dSchwirigkeit und dRundene gwählt hesch) und ihr werded die gliiche Frage becho.
+				Wenn du gege dini Fründe willsch spiele, denn schick ihne de Link wo aazeigt wird (nachdem
+				du dSchwirigkeit und dRundene gwählt hesch) und ihr werded die gliiche Frage becho. Am
+				Schluss wirsch du e (automatisch aktuallisierti) Rangliste gseh vu allne wo i de letzte
+				Stund die Frage beantwortet hend.
 			</p>
 			<p>
 				<H2>To do:</H2>
